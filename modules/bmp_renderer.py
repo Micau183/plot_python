@@ -1,5 +1,7 @@
 import numpy as np
 import os
+from modules.image_object import Image_object
+
 
 class Bmp_renderer:
     def __init__(self):
@@ -13,7 +15,8 @@ class Bmp_renderer:
     def creation_image(self, hauteur, longueur):
         self.set_dimension(hauteur, longueur)
         self.set_taille_fichier()
-        self.set_image()
+        self.set_image_default()
+    
 
     def set_dimension(self, hauteur, longueur):
         self.hauteur = hauteur
@@ -23,10 +26,15 @@ class Bmp_renderer:
     def set_taille_fichier(self):
         self.taille_fichier = 54 + (self.hauteur * self.longueur * 3)
     
-    def set_image(self):
+    def set_image_default(self):
         #à changer et appeller l'image voulu à la place du carré blanc
-        self.image = np.full((self.longueur, self.hauteur, 3), 255, dtype=np.uint8)
+        self.image = np.full((self.hauteur, self.longueur, 3), 255, dtype=np.uint8)
 
+    def set_image(self, img_obj):
+        self.set_dimension(img_obj.hauteur, img_obj.longueur)
+        self.set_taille_fichier()
+        self.image = img_obj.image
+        self.name = img_obj.name
 
     def assemble_image(self):
         self.set_entete()
@@ -54,6 +62,13 @@ class Bmp_renderer:
         # Taille de l'en-tête de l'image (4 octets)
         self.entete.extend([40, 0, 0, 0])
     
+        # longueur de l'image (4 octets)
+        self.entete.extend([
+        (self.longueur & 0xFF),            
+        (self.longueur >> 8) & 0xFF,        
+        (self.longueur >> 16) & 0xFF,       
+        (self.longueur >> 24) & 0xFF        
+        ])
             # hauteur de l'image (4 octets)
         self.entete.extend([
         (self.hauteur & 0xFF),             
@@ -62,13 +77,7 @@ class Bmp_renderer:
         (self.hauteur >> 24) & 0xFF       
         ])
 
-        # longueur de l'image (4 octets)
-        self.entete.extend([
-        (self.longueur & 0xFF),            
-        (self.longueur >> 8) & 0xFF,        
-        (self.longueur >> 16) & 0xFF,       
-        (self.longueur >> 24) & 0xFF        
-        ])
+        
 
         # Plans (2 octets)
         self.entete.extend([1, 0])
@@ -95,10 +104,10 @@ class Bmp_renderer:
         self.entete.extend([0, 0, 0, 0])
     
     def rendu(self):
-        if not os.path.exists('output'):
-            os.makedirs('output')
+        if not os.path.exists('plot_python/output'):
+            os.makedirs('plot_python/output')
 
-        name = f'output/image{self.hauteur}_{self.longueur}.bmp'
+        name = f'plot_python/output/{self.name}_{self.hauteur}_{self.longueur}.bmp'
         with open(name, 'wb') as fichier:
             fichier.write(bytearray(self.donnees))
     
