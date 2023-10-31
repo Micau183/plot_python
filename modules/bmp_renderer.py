@@ -21,6 +21,9 @@ class Bmp_renderer:
     def set_dimension(self, hauteur, longueur):
         self.hauteur = hauteur
         self.longueur = longueur
+
+    def set_name(self, name):
+        self.name = name
         
     
     def set_taille_fichier(self):

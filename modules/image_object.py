@@ -7,6 +7,10 @@ class Image_object:
         self.longueur = 0
         self.hauteur = 0
         self.name = "image"
+        self.img_obj_liste = []
+        self.x = 0
+        self.y = 0
+
 
     def image_blanche(self, hauteur, longueur):
         self.longueur = longueur
@@ -21,7 +25,11 @@ class Image_object:
         for y in range(self.hauteur):
             self.ajoute_point(indice, y, epaisseur, couleur)
 
-
+    def border(self, epaisseur=1, couleur='noir'):
+        self.ligne_hori(0, epaisseur=epaisseur, couleur=couleur)
+        self.ligne_hori(self.hauteur -1, epaisseur=epaisseur, couleur=couleur)
+        self.ligne_vert(0, epaisseur=epaisseur, couleur=couleur)
+        self.ligne_vert(self.longueur -1, epaisseur=epaisseur, couleur=couleur)
 
     def ajoute_point(self, x, y, epaisseur=2, couleur='noir'):
         if isinstance(couleur, str):
@@ -33,6 +41,8 @@ class Image_object:
                 color = [0, 255, 0]
             elif couleur == 'bleu':
                 color = [255, 0, 0]
+            elif couleur == 'jaune':
+                color = [0, 255, 255]
             else:
                 raise ValueError("Couleur non prise en charge")
         elif isinstance(couleur, (list, tuple)) and len(couleur) == 3:
@@ -78,6 +88,17 @@ class Image_object:
             
             self.ajoute_point(x_coord, y_coord,epaisseur=epaisseur, couleur = couleur)
 
+    def combine_region(self):
+        for img in self.img_obj_liste:
+            for i in range(img.hauteur):
+                for j in range(img.longueur):
+                    self.image[img.x + i][img.y + j] = img.image[i][j]
+
+    def add_region(self, img_obj, x, y):
+        img_obj.x = x
+        img_obj.y = y
+        self.img_obj_liste.append(img_obj)
+        
 
 
 
