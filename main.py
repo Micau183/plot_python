@@ -9,7 +9,10 @@ def main():
     renderer = Bmp_renderer()
     img_obj = Image_object()
     img_obj.image_blanche(300, 1000)
-    img_obj.plot_fonction(np.cos, end_x=6.3,epaisseur=3)
+    img_obj.ligne_hori(100, couleur ='rouge', epaisseur=2)
+    img_obj.plot_fonction(np.cos, end_x=6.3,epaisseur=3, couleur=[30,170, 20])
+    img_obj.ligne_vert(800, couleur ='bleu')
+    
     renderer.set_image(img_obj)
     renderer.assemble_image()
     renderer.rendu()
