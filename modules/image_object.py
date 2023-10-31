@@ -1,4 +1,5 @@
 import numpy as np
+from modules.texte import Texte
 import matplotlib.pyplot as plt
 
 class Image_object:
@@ -98,6 +99,29 @@ class Image_object:
         img_obj.x = x
         img_obj.y = y
         self.img_obj_liste.append(img_obj)
+
+    def text_plot(self, string, epaisseur=1, couleur ='noir'):
+        self.name = string
+        textplot = Texte()
+        textplot.set(string)
+        
+        
+        self.image_blanche(8, 8* textplot.taille)
+        print(self.hauteur)
+        print(self.longueur)
+        for i in range(textplot.taille):
+            subplot = Image_object()
+            subplot.image_blanche(8, 8)
+            liste_point = textplot.list[i]
+            for j in range(len(liste_point)):
+                subplot.ajoute_point(liste_point[j][0], liste_point[j][1], epaisseur=epaisseur, couleur=couleur)
+
+            # plt.imshow(subplot.image)
+            # plt.show()
+            self.add_region(subplot, 0, 8*i)
+        self.combine_region()
+
+
         
 
 
@@ -106,8 +130,8 @@ def test():
     img = Image_object()
     img.image_blanche(300, 1000)
     img.plot_fonction(np.sin)
-    plt.imshow(img.image)
-    plt.show()
+    #plt.imshow(img.image)
+    #plt.show()
 
     
 
