@@ -109,7 +109,7 @@ class Image_object:
     def text_plot(self, string, epaisseur=1, couleur ='noir'):
         self.name = string
         textplot = Texte()
-        textplot.set(string)
+        textplot.set(string.upper())
         
         
         self.image_blanche(8, 6* textplot.taille)
