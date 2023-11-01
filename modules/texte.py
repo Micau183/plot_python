@@ -1,14 +1,11 @@
 import numpy as np
+from modules.alphabet import Alphabet
 class Texte:
     def __init__(self):
         self.string = ""
         self.list = []
         self.taille = 1
-        self.alphabet = {
-    '0': [[3,1],[4, 1], [2,2], [2,3], [2,4], [2,5], [5,2], [5,3], [5,4], [5,5],[3,6],[4, 6]],
-    '1': [[3,1],[2,2],[3,2],[3,3],[3,4],[3,5],[3,6],[2,6],[4,6]],
-    '2': [[1,2],[2,1],[3,1],[4,2],[4,3],[3,4],[2,5],[1,6],[1,7],[2,7],[3,7],[4,7]]
-        }
+        self.alphabet = {}
     def set_dimension(self):
         self.taille = len(self.string)
 
@@ -19,7 +16,12 @@ class Texte:
     def set_name(self, string):
         self.string = string
 
+    def set_alphabet(self):
+        alp= Alphabet()
+        alp.extraire_points()
+        self.alphabet = alp.dic_points
     def set(self, string):
+        self.set_alphabet()
         self.set_name(string)
         self.set_dimension()
         self.set_list()

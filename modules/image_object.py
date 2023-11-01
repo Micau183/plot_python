@@ -59,7 +59,9 @@ class Image_object:
                     new_x, new_y = x + dx, y + dy
                     if 0 <= new_x < self.image.shape[1] and 0 <= new_y < self.image.shape[0]:
                         delta_intensity = [100, 100, 100] if r == 0 else [30, 30, 30]
-                        self.image[new_y, new_x] = np.maximum(self.image[new_y, new_x] - delta_intensity, color)
+                        nouveau_pixel = np.maximum(self.image[new_y, new_x] - delta_intensity, color)
+                        #print(nouveau_pixel)
+                        self.image[new_y, new_x] = nouveau_pixel
 
     def plot_fonction(self, f, start_x=0, end_x=10, epaisseur=2, couleur='bleu'):
         self.name = str(f)
@@ -90,10 +92,14 @@ class Image_object:
             self.ajoute_point(x_coord, y_coord,epaisseur=epaisseur, couleur = couleur)
 
     def combine_region(self):
+
         for img in self.img_obj_liste:
+            # plt.imshow(img)
+            # plt.show()
             for i in range(img.hauteur):
                 for j in range(img.longueur):
                     self.image[img.x + i][img.y + j] = img.image[i][j]
+                    #print(img.image[i][j])
 
     def add_region(self, img_obj, x, y):
         img_obj.x = x
@@ -106,19 +112,19 @@ class Image_object:
         textplot.set(string)
         
         
-        self.image_blanche(8, 8* textplot.taille)
+        self.image_blanche(8, 6* textplot.taille)
         print(self.hauteur)
         print(self.longueur)
         for i in range(textplot.taille):
             subplot = Image_object()
-            subplot.image_blanche(8, 8)
+            subplot.image_blanche(8, 6)
             liste_point = textplot.list[i]
             for j in range(len(liste_point)):
                 subplot.ajoute_point(liste_point[j][0], liste_point[j][1], epaisseur=epaisseur, couleur=couleur)
 
             # plt.imshow(subplot.image)
             # plt.show()
-            self.add_region(subplot, 0, 8*i)
+            self.add_region(subplot, 0, 6*i)
         self.combine_region()
 
 
