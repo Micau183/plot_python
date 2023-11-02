@@ -11,14 +11,38 @@ class Image_object:
         self.img_obj_liste = []
         self.x = 0
         self.y = 0
+        self.epaisseur = 1
+        self.scale =1
 
 
-    def image_blanche(self, hauteur, longueur):
-        # On créée une image blanche et on set up les dimensions
+    def image_blanche(self, hauteur, longueur, scale=1, epaisseur=1):
+        # On créée une image blanche et on set up les dimensions et l'autoscale
 
         self.longueur = longueur
         self.hauteur = hauteur
         self.image = np.full((self.hauteur, self.longueur, 3), 255, dtype=np.uint8)
+        self.set_scale(scale)
+
+        #gestion de l'epaisseur automatique (pas très propre j'avoue)
+        if epaisseur is None or epaisseur =='auto':
+            self.set_epaisseur()
+        else:
+            self.epaisseur = epaisseur
+    
+
+    def set_scale(self, scale):
+        #gestion du scale auto
+        if scale =='auto':
+            self.scale = self.autoscale()
+        else:
+            self.scale = scale
+    
+    def set_epaisseur(self):
+        #ça casse dans text_plot si je laisse le if, c'est pour ça que je le fais en deux temps
+        # if self.epaisseur =='auto':
+        self.epaisseur = int(np.log2(self.scale+1))
+        if self.epaisseur >3:
+            self.epaisseur = 3
 
     def ligne_hori(self, x, epaisseur=1, couleur='noir'):
         #droite horizontale à la hauteur x
@@ -53,6 +77,7 @@ class Image_object:
         self.ligne_vert(self.longueur -1, epaisseur=epaisseur, couleur=couleur)
 
     def ajoute_point(self, x, y, epaisseur=1, couleur='noir'):
+
         #ajoute un point à l'indice (x, y)
 
         #on regarde la couleur, en fonction de si l'argument est un tuple ou un string
@@ -102,24 +127,26 @@ class Image_object:
                         self.image[new_y, new_x] = nouveau_pixel
 
 
-    def plot_fonction(self, f, start_x=0, end_x=10, epaisseur=2, couleur='bleu'):
+    def plot_fonction(self, f, start_x=0, end_x=10, epaisseur='auto', couleur='bleu', scale ='auto'):
         #On sépare le plot en 4 parties, le titre, l'axe des ordonnées, l'axe des abscisse et le plot
         # de la fonction
-
+        
+        #J'ai modifié le code pour le scale et epaisseur auto donc c'est un peu dégeu
         titre = Image_object()
-        titre.image_blanche(int(self.hauteur/10), self.longueur)
-        titre.text_plot("Fonction : " +str(f))
+        titre.image_blanche(int(self.hauteur/10), self.longueur, epaisseur=epaisseur, scale = scale)
+        titre.text_plot("Fonction : " +str(f),scale = titre.autoscale()+1, epaisseur = epaisseur)
 
+        
         fonction = Image_object()
-        fonction.image_blanche(int(self.hauteur*8/10), int(self.longueur*8/10))
+        fonction.image_blanche(int(self.hauteur*8/10), int(self.longueur*8/10), epaisseur=epaisseur, scale = scale)
         fonction.border()
 
         abscisse = Image_object()
-        abscisse.image_blanche(int(self.hauteur/10),int(self.longueur*8/10))
+        abscisse.image_blanche(int(self.hauteur/10),int(self.longueur*8/10), epaisseur=epaisseur, scale = scale)
         #abscisse.border(couleur='bleu', epaisseur=1)
 
         ordonee = Image_object()
-        ordonee.image_blanche(int(self.hauteur*8/10), int(self.longueur/10))
+        ordonee.image_blanche(int(self.hauteur*8/10), int(self.longueur/10), epaisseur=epaisseur, scale = scale)
         #ordonee.border(couleur='rouge', epaisseur=1)
         
 
@@ -128,7 +155,7 @@ class Image_object:
 
         X = np.linspace(start_x, end_x, fonction.longueur)
 
-        abscisse.plot_abscisse(10, start_x, end_x)
+        abscisse.plot_abscisse(10, start_x, end_x, scale=scale, epaisseur=epaisseur)
         
         Y = f(X)
 
@@ -155,14 +182,15 @@ class Image_object:
         #Alors ça, c'est dégeu et ça marche pas il faut "juste" mettre les valeurs min et max en 
         #ordonné de la fonction
         new_range = rangeY/coeff
-        ordonee.plot_ordonee(10, mini-(1-coeff)*new_range*0.5, maxi+(1-coeff)*new_range)
+        ordonee.plot_ordonee(10, mini-(1-coeff)*new_range*0.5, maxi+(1-coeff)*new_range, scale=scale, epaisseur=epaisseur)
 
         #plot de la fonction   
         for i in range(fonction.longueur):
             y_coord = int(Y[i] + ajust)
             x_coord = int(i)
             
-            fonction.ajoute_point(x_coord, y_coord,epaisseur=epaisseur, couleur = couleur)
+            #le -1 c'est un terme correctif au feeling
+            fonction.ajoute_point(x_coord, y_coord,epaisseur=fonction.epaisseur-1, couleur = couleur)
 
         #On ajoute les 4 régions à l'image initiale
         self.add_region(fonction, int(self.hauteur/10), int(self.longueur/10))
@@ -188,30 +216,51 @@ class Image_object:
         img_obj.y = y
         self.img_obj_liste.append(img_obj)
 
-    def text_plot(self, string, epaisseur=1, couleur ='noir', pos='center', scale=1):
-       
+    def autoscale(self):
+        #La valeur 51 est du pur feeling mais ça passe plutôt bien
+        mini = min(self.hauteur, self.longueur)
+        a = int(mini/51)
+        return int(mini/51)
+    
+
+    def text_plot(self, string, epaisseur=None, couleur ='noir', pos='center', scale='auto'):
+        self.set_scale(scale)
+        #print(self.scale)
+
        #On crée un objet Text et on met .upper parce que j'ai pas encore mis les minuscules
         self.name = string
         textplot = Texte()
-        textplot.set(string.upper(), scale)
+        textplot.set(string.upper(), self.scale)
         
         #On crée un image_object de la taille du mot (la taille d'une lettre est 8*6)
         img_obj = Image_object()
-        img_obj.image_blanche(8*scale, 6* textplot.taille*scale)
+        img_obj.image_blanche(8*self.scale, 6* textplot.taille*self.scale)
         
+        
+        #gestion de l'epaisseur auto
+        if epaisseur is None or epaisseur =='auto':
+                self.set_epaisseur()
+                #print(self.epaisseur)
+        else:
+            self.epaisseur = epaisseur
+
+        ep = self.epaisseur
+
         #Pour chaque lettre du mot on crée un nouvel Image_object() et on les ajoute au grand
         #c'est surement pas opti, on pourrait surement tout rajouter directement sur le Image_object du mot
 
         for i in range(textplot.taille):
             subplot = Image_object()
-            subplot.image_blanche(8*scale, 6*scale)
+            subplot.image_blanche(8*self.scale, 6*self.scale)
+            
+
             liste_point = textplot.list[i]
             for j in range(len(liste_point)):
-                subplot.ajoute_point(liste_point[j][0], liste_point[j][1], epaisseur=epaisseur, couleur=couleur)
+                subplot.ajoute_point(liste_point[j][0], liste_point[j][1], ep, couleur=couleur)
 
             # plt.imshow(subplot.image)
             # plt.show()
-            img_obj.add_region(subplot, 0, 6*i*scale)
+            img_obj.add_region(subplot, 0, 6*i*self.scale)
         img_obj.combine_region()
         
         #On regarde où on veut positionner le mot dans le plot initial
@@ -227,7 +276,7 @@ class Image_object:
         self.add_region(img_obj,x_center, y_center)
         self.combine_region()
 
-    def plot_abscisse(self, nb_points, start_x, end_x):
+    def plot_abscisse(self, nb_points, start_x, end_x, scale = 1, epaisseur = 1):
         #On fait des ptits traits de la taille de 1/4 de hauteur du plot
         liste = np.linspace(0, self.longueur, nb_points)
         pas = (end_x - start_x)/nb_points
@@ -235,9 +284,9 @@ class Image_object:
             
             self.segment_vert(int(liste[i]), int(self.hauteur*3/4), int(self.hauteur))
             #print(str(start_x + pas*i))
-            self.text_plot(str(start_x + pas*i)[:5], pos =[int(self.hauteur*2/4), int(liste[i])])
+            self.text_plot(str(start_x + pas*i)[:5], pos =[int(self.hauteur*2/4), int(liste[i])], scale = scale, epaisseur = epaisseur)
 
-    def plot_ordonee(self, nb_points, start_y, end_y):
+    def plot_ordonee(self, nb_points, start_y, end_y, scale=1, epaisseur = 1):
         #On fait des ptits traits de la taille de 1/4 de longueur du plot
 
         liste = np.linspace(0, self.hauteur, nb_points)
@@ -246,7 +295,7 @@ class Image_object:
             
             self.segment_hori(int(liste[i]), int(self.longueur*3/4), int(self.longueur))
             #print(str(start_y + pas*i))
-            self.text_plot(str(round(start_y + pas*i, 1)), pos =[int(liste[i]), int(self.longueur*2/4)])
+            self.text_plot(str(round(start_y + pas*i, 1)), pos =[int(liste[i]), int(self.longueur*2/4)], scale = scale, epaisseur = epaisseur)
         
 
 
