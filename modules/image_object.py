@@ -188,30 +188,30 @@ class Image_object:
         img_obj.y = y
         self.img_obj_liste.append(img_obj)
 
-    def text_plot(self, string, epaisseur=1, couleur ='noir', pos='center'):
+    def text_plot(self, string, epaisseur=1, couleur ='noir', pos='center', scale=1):
        
        #On crée un objet Text et on met .upper parce que j'ai pas encore mis les minuscules
         self.name = string
         textplot = Texte()
-        textplot.set(string.upper())
+        textplot.set(string.upper(), scale)
         
         #On crée un image_object de la taille du mot (la taille d'une lettre est 8*6)
         img_obj = Image_object()
-        img_obj.image_blanche(8, 6* textplot.taille)
+        img_obj.image_blanche(8*scale, 6* textplot.taille*scale)
         
         #Pour chaque lettre du mot on crée un nouvel Image_object() et on les ajoute au grand
         #c'est surement pas opti, on pourrait surement tout rajouter directement sur le Image_object du mot
 
         for i in range(textplot.taille):
             subplot = Image_object()
-            subplot.image_blanche(8, 6)
+            subplot.image_blanche(8*scale, 6*scale)
             liste_point = textplot.list[i]
             for j in range(len(liste_point)):
                 subplot.ajoute_point(liste_point[j][0], liste_point[j][1], epaisseur=epaisseur, couleur=couleur)
 
             # plt.imshow(subplot.image)
             # plt.show()
-            img_obj.add_region(subplot, 0, 6*i)
+            img_obj.add_region(subplot, 0, 6*i*scale)
         img_obj.combine_region()
         
         #On regarde où on veut positionner le mot dans le plot initial
