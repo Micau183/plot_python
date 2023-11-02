@@ -63,42 +63,64 @@ class Image_object:
                         #print(nouveau_pixel)
                         self.image[new_y, new_x] = nouveau_pixel
 
-    def plot_fonction(self, f, start_x=0, end_x=10, epaisseur=2, couleur='bleu'):
+    def plot_fonction(self, f, start_x=0, end_x=10, epaisseur=2, couleur='bleu', coeff=0.9):
+
+        legende= Image_object()
+        legende.image_blanche(int(self.hauteur/10), self.longueur)
+
+        abscisse =Image_object()
+        abscisse.image_blanche(int(self.hauteur/10), self.longueur)
+
+        ordonee = Image_object()
+        ordonee.image_blanche(self.hauteur, int(self.longueur/10))
+        
+        fonction = Image_object()
+        fonction.image_blanche(int(self.hauteur*8/10), int(self.longueur*8/10))
+        
+        fonction.border()
+        
         self.name = str(f)
 
-        X = np.linspace(start_x, end_x, self.longueur)
+        X = np.linspace(start_x, end_x, fonction.longueur)
+
         Y = f(X)
+
         
+            
         # Coefficient de mise à l'échelle pour la hauteur de l'image
-        coeff = 0.9
+        
         
         mini = min(Y)
         maxi = max(Y)
         rangeY = maxi - mini
         
         # Calcule le ratio de mise à l'échelle pour adapter Y à la hauteur de l'image
-        ratio = self.hauteur * coeff / rangeY
+        ratio = fonction.hauteur * coeff / rangeY
         
         # Ajuste les valeurs Y en fonction de la hauteur de l'image
         Y = (Y - mini) * ratio
         
         # Calcule l'ajustement pour positionner la courbe verticalement
-        ajust = self.hauteur * ((1 - coeff) / 2)
+        ajust = fonction.hauteur * ((1 - coeff) / 2)
         
-        for i in range(self.longueur):
+        for i in range(fonction.longueur):
             y_coord = int(Y[i] + ajust)
             x_coord = int(i)
             
-            self.ajoute_point(x_coord, y_coord,epaisseur=epaisseur, couleur = couleur)
+            fonction.ajoute_point(x_coord, y_coord,epaisseur=epaisseur, couleur = couleur)
+        
+        
 
     def combine_region(self):
 
         for img in self.img_obj_liste:
-            # plt.imshow(img)
+                
+            # plt.imshow(img.image)
             # plt.show()
             for i in range(img.hauteur):
                 for j in range(img.longueur):
-                    self.image[img.x + i][img.y + j] = img.image[i][j]
+                    if not np.array_equal(img.image[i][j], [255, 255, 255]):
+                        self.image[img.x + i][img.y + j] = img.image[i][j]
                     #print(img.image[i][j])
 
     def add_region(self, img_obj, x, y):
@@ -126,6 +148,11 @@ class Image_object:
             # plt.show()
             self.add_region(subplot, 0, 6*i)
         self.combine_region()
+
+    
+        
+
+
 
 
         
