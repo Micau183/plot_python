@@ -6,8 +6,11 @@ class Texte:
         self.list = []
         self.taille = 1
         self.alphabet = {}
+
+
     def set_dimension(self):
         self.taille = len(self.string)
+
 
     def set_list(self):
         for elt in self.string:
@@ -20,7 +23,10 @@ class Texte:
         alp= Alphabet()
         alp.extraire_points()
         self.alphabet = alp.dic_points
+
+
     def set(self, string):
+        #set applique tout les autres set et on appelle que lui
         self.set_alphabet()
         self.set_name(string)
         self.set_dimension()

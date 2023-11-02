@@ -183,20 +183,25 @@ class Image_object:
 
 
     def add_region(self, img_obj, x, y):
+        #Ajout d'une région à la liste des régions et aux coordonnées voulues
         img_obj.x = x
         img_obj.y = y
         self.img_obj_liste.append(img_obj)
 
     def text_plot(self, string, epaisseur=1, couleur ='noir', pos='center'):
        
+       #On crée un objet Text et on met .upper parce que j'ai pas encore mis les minuscules
         self.name = string
         textplot = Texte()
         textplot.set(string.upper())
         
+        #On crée un image_object de la taille du mot (la taille d'une lettre est 8*6)
         img_obj = Image_object()
         img_obj.image_blanche(8, 6* textplot.taille)
-        # print(img_obj.hauteur)
-        # print(img_obj.longueur)
+        
+        #Pour chaque lettre du mot on crée un nouvel Image_object() et on les ajoute au grand
+        #c'est surement pas opti, on pourrait surement tout rajouter directement sur le Image_object du mot
+
         for i in range(textplot.taille):
             subplot = Image_object()
             subplot.image_blanche(8, 6)
@@ -209,6 +214,7 @@ class Image_object:
             img_obj.add_region(subplot, 0, 6*i)
         img_obj.combine_region()
         
+        #On regarde où on veut positionner le mot dans le plot initial
         if isinstance(pos, list):
             x_center, y_center = pos
         elif  pos =='corner':
@@ -222,6 +228,7 @@ class Image_object:
         self.combine_region()
 
     def plot_abscisse(self, nb_points, start_x, end_x):
+        #On fait des ptits traits de la taille de 1/4 de hauteur du plot
         liste = np.linspace(0, self.longueur, nb_points)
         pas = (end_x - start_x)/nb_points
         for i in range(nb_points-1):
@@ -231,6 +238,8 @@ class Image_object:
             self.text_plot(str(start_x + pas*i)[:5], pos =[int(self.hauteur*2/4), int(liste[i])])
 
     def plot_ordonee(self, nb_points, start_y, end_y):
+        #On fait des ptits traits de la taille de 1/4 de longueur du plot
+
         liste = np.linspace(0, self.hauteur, nb_points)
         pas = (end_y - start_y)/nb_points
         for i in range(nb_points-1):

@@ -437,11 +437,14 @@ class Alphabet:
         }
 
     def trouver_points(self, matrice):
+        #à partir d'une matrice on trouve les points 
         points = []
 
         for i in range(matrice.shape[0]):
             for j in range(matrice.shape[1]):
+                #le 7-i c'est juste parce que c'est à l'envers
                 if matrice[7 - i, j] == 1:
+                    #il y a tout qui est à l'envers, je sais pas comment j'ai codé
                     points.append([j,i])
         return points
 
