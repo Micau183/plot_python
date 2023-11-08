@@ -36,13 +36,17 @@ class Image_object:
             self.scale = self.autoscale()
         else:
             self.scale = scale
-    
+        if self.scale == 0:
+            self.scale = 1    
     def set_epaisseur(self):
         #ça casse dans text_plot si je laisse le if, c'est pour ça que je le fais en deux temps
         # if self.epaisseur =='auto':
         self.epaisseur = int(np.log2(self.scale+1))
         if self.epaisseur >3:
             self.epaisseur = 3
+        if self.epaisseur<=0:
+            self.epaisseur = 1
+
 
     def ligne_hori(self, x, epaisseur=1, couleur='noir'):
         #droite horizontale à la hauteur x
