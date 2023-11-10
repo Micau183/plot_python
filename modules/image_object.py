@@ -46,8 +46,7 @@ class Image_object:
             self.epaisseur = 3
         if self.epaisseur<=0:
             self.epaisseur = 1
-
-
+    
     def ligne_hori(self, x, epaisseur=1, couleur='noir'):
         #droite horizontale à la hauteur x
 

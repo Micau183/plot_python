@@ -81,9 +81,5 @@ def main():
     # renderer.set_name('scale_testt')
     # renderer.rendu()
 
-    
-
-
-
 if __name__ == "__main__":
     main()
