@@ -1,3 +1,5 @@
+import numpy as np
+import matplotlib.pyplot as plt
 class Bresenham:
     def __init__(self, x0, y0, x1, y1):
         self.x0 = x0
@@ -16,7 +18,7 @@ class Bresenham:
         if dx > dy:
             err = dx / 2.0
             while x != self.x1:
-                points.append((x, y))
+                points.append([int(x), int(y)])
                 err -= dy
                 if err < 0:
                     y += sy
@@ -25,22 +27,30 @@ class Bresenham:
         else:
             err = dy / 2.0
             while y != self.y1:
-                points.append((x, y))
+                points.append([int(x), int(y)])
                 err -= dx
                 if err < 0:
                     x += sx
                     err += dy
                 y += sy
 
-        points.append((x, y))
+        points.append([int(x), int(y)])
         return points
 
 # Example usage:
-x0, y0 = 1, 1
-x1, y1 = 8, 4
+def test():
+    x0, y0 = 14, 12
+    x1, y1 = 83, 42
 
-bresenham_line = Bresenham(x0, y0, x1, y1)
-line_points = bresenham_line.get_line()
+    bresenham_line = Bresenham(x0, y0, x1, y1)
+    line_points = bresenham_line.get_line()
 
-for point in line_points:
-    print(point)
+
+    image = np.zeros((100, 100))
+
+
+    for point in line_points:
+        print(point)
+        image[point[0], point[1]] = 1
+    plt.imshow(image, cmap='gray_r')
+    plt.show()

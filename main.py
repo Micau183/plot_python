@@ -1,5 +1,8 @@
 from modules.bmp_renderer import Bmp_renderer
 from modules.image_object import Image_object
+from modules.module_graph.graph import Graph
+from modules.module_graph.arete import Arete
+from modules.module_graph.sommet import Sommet
 import numpy as np
 import matplotlib.pyplot as plt
 def main():
@@ -19,27 +22,27 @@ def main():
     # renderer.rendu()
 
 ##------------------------------------subplot test---------------------
-    renderer = Bmp_renderer()
-    img_obj = Image_object()
-    sub1 = Image_object()
-    sub2 = Image_object()
+    #renderer = Bmp_renderer()
+    #img_obj = Image_object()
+   # sub1 = Image_object()
+   # sub2 = Image_object()
 
-    img_obj.image_blanche(1000, 1000)
-    sub1.image_blanche(400, 900)
-    sub2.image_blanche(400, 900)
+   # img_obj.image_blanche(1000, 1000)
+  #  sub1.image_blanche(400, 900)
+#    sub2.image_blanche(400, 900)
     
-    sub1.plot_fonction(np.cos, start_x=0, end_x=6.3, couleur="rouge")
-    sub2.plot_fonction(np.sin, start_x=0,end_x=6.3, couleur="bleu")
+ #   sub1.plot_fonction(np.cos, start_x=0, end_x=6.3, couleur="rouge")
+  #  sub2.plot_fonction(np.sin, start_x=0,end_x=6.3, couleur="bleu")
 
-    img_obj.add_region(sub1, 50, 50)
-    img_obj.add_region(sub2, 550, 50)
+  #  img_obj.add_region(sub1, 50, 50)
+  #  img_obj.add_region(sub2, 550, 50)
 
-    img_obj.combine_region()
+ #   img_obj.combine_region()
 
-    renderer.set_image(img_obj)
-    renderer.assemble_image()
-    renderer.set_name('subplot_test2')
-    renderer.rendu()
+  #  renderer.set_image(img_obj)
+  #  renderer.assemble_image()
+   # renderer.set_name('subplot_test2')
+   # renderer.rendu()
 
     #-----------------------------------------------------------
 
@@ -80,6 +83,42 @@ def main():
     # renderer.assemble_image()
     # renderer.set_name('scale_testt')
     # renderer.rendu()
+
+    renderer = Bmp_renderer()
+    img_obj = Image_object()
+    img_obj.image_blanche(1000, 1000)
+
+#####
+
+    # Create Sommet instances
+    sommet1 = Sommet("A")
+    sommet2 = Sommet("B")
+    sommet3 = Sommet("C")
+    sommet4 = Sommet("D")
+    sommet5 = Sommet("E")
+
+    # Create Arete instances to connect Sommets
+    arete1 = Arete(sommet1, sommet2)
+    arete2 = Arete(sommet2, sommet3)
+    arete3 = Arete(sommet3, sommet4)
+    arete4 = Arete(sommet4, sommet5)
+    arete5 = Arete(sommet5, sommet1)
+    arete6 = Arete(sommet5, sommet3)
+
+    # Create a Graph and add Sommets and Aretes to it
+    graph = Graph()
+    graph.add_sommets([sommet1, sommet2, sommet3, sommet4, sommet5])
+    graph.add_aretes([arete1, arete2, arete3, arete4, arete5, arete6])
+
+
+    img_obj.plot_graph(graph, epaisseur=2)
+
+    #img_obj.circle(100, 0, 0, epaisseur=1)
+  #  img_obj.line(300, 300, 900, 654)
+    renderer.set_image(img_obj)
+    renderer.assemble_image()
+    renderer.set_name('graph_test')
+    renderer.rendu()
 
 if __name__ == "__main__":
     main()

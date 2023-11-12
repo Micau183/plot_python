@@ -1,7 +1,12 @@
 import numpy as np
+from modules.algorithm.bresenham import Bresenham
+from modules.algorithm.midpointcircle import MidpointCircle
 from modules.texte import Texte
+from modules.module_graph.graph import Graph as g
+from modules.module_graph.sommet import Sommet as s
+from modules.module_graph.arete import Arete as a
 import matplotlib.pyplot as plt
-
+import time 
 class Image_object:
     def __init__(self):
         self.image = []
@@ -37,7 +42,8 @@ class Image_object:
         else:
             self.scale = scale
         if self.scale == 0:
-            self.scale = 1    
+            self.scale = 1 
+
     def set_epaisseur(self):
         #ça casse dans text_plot si je laisse le if, c'est pour ça que je le fais en deux temps
         # if self.epaisseur =='auto':
@@ -103,8 +109,8 @@ class Image_object:
         else:
             raise ValueError("Couleur invalide")
 
-        
-        self.image[y, x] = color
+        if 0 <= x < self.image.shape[1] and 0 <= y < self.image.shape[0]:
+            self.image[y,x] = color
 
        # Boucle extérieure pour l'épaisseur du flou
         for r in range(epaisseur):
@@ -300,10 +306,50 @@ class Image_object:
             #print(str(start_y + pas*i))
             self.text_plot(str(round(start_y + pas*i, 1)), pos =[int(liste[i]), int(self.longueur*2/4)], scale = scale, epaisseur = epaisseur)
         
+    def circle(self, rayon, x, y, scale=1, epaisseur = 1):
+        midpoint_circle = MidpointCircle(rayon)
+        circle_points = midpoint_circle.get_circle()
+        print(circle_points)
+        for i in range(len(circle_points)):
+            self.ajoute_point(circle_points[i][0]+x, circle_points[i][1]+y, epaisseur)
 
 
+    def line(self, x0, y0, x1, y1, scale=1, epaisseur=1):
+        bresenham_line = Bresenham(x0, y0, x1, y1)
+        line_points = bresenham_line.get_line()
+        print(line_points)
+        for i in range(len(line_points)):
+            print(line_points[i][0])
+            
+            self.ajoute_point(line_points[i][0], line_points[i][1], epaisseur)
+    
+    def plot_graph(self, graph, rayon = 20, epaisseur = 2):
         
+        for i in range(graph.get_nb_aretes()):
+            print(i)
 
+            arete = graph.get_arete(i)
+
+            debut = arete.get_debut()
+            fin = arete.get_fin()
+
+            x0 = int(debut.get_pos_x() * self.longueur + rayon)
+            y0 = int(debut.get_pos_y() * self.hauteur + rayon)
+
+            x1 = int(fin.get_pos_x() * self.longueur + rayon)
+            y1 = int(fin.get_pos_y() * self.hauteur + rayon)
+
+            self.line(x0, y0, x1, y1, epaisseur = epaisseur)
+            
+
+        for i in range(graph.get_nb_sommets()):
+            print(i)
+            sommet = graph.get_sommet(i)
+
+            x = int(sommet.get_pos_x()* self.longueur)
+            y = int(sommet.get_pos_y()* self.hauteur)
+
+            self.circle(rayon, x, y, epaisseur = epaisseur)
 
 
 def test():

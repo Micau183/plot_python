@@ -1,3 +1,5 @@
+import numpy as np
+import matplotlib.pyplot as plt
 class MidpointCircle:
     def __init__(self, radius):
         self.radius = radius
@@ -25,21 +27,29 @@ class MidpointCircle:
 
     def _plot_points(self, all_points, x, y):
         all_points.extend([
-            (x, y),
-            (-x, y),
-            (x, -y),
-            (-x, -y),
-            (y, x),
-            (-y, x),
-            (y, -x),
-            (-y, -x),
+            [x+self.radius, y+self.radius],
+            [-x+self.radius, y+self.radius],
+            [x+self.radius, -y+self.radius],
+            [-x+self.radius, -y+self.radius],
+            [y+self.radius, x+self.radius],
+            [-y+self.radius, x+self.radius],
+            [y+self.radius, -x+self.radius],
+            [-y+self.radius, -x+self.radius],
         ])
 
 # Example usage:
-radius = 5
+def test():
+    radius = 100
 
-midpoint_circle = MidpointCircle(radius)
-circle_points = midpoint_circle.get_circle()
+    midpoint_circle = MidpointCircle(radius)
+    circle_points = midpoint_circle.get_circle()
 
-for point in circle_points:
-    print(point)
+    for point in circle_points:
+        print(point)
+
+    image = np.zeros((radius*3, radius*3))
+    for point in circle_points:
+        image[point[0],point[1]] = 1
+
+    plt.imshow(image, cmap='gray')
+    plt.show()

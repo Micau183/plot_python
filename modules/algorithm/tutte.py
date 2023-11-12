@@ -1,34 +1,25 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
+import networkx as nx
 
-class TutteAlgorithm:
-    def __init__(self, graph):
-        self.graph = graph
 
-    def draw_planar_graph(self):
-        pos = self.tutte_embedding()
-        #nx.draw(self.graph, pos, with_labels=True, font_weight='bold', node_size=700)
-        plt.show()
+# Create an empty undirected graph
+G = nx.Graph()
 
-    def tutte_embedding(self):
-        n = len(self.graph.nodes())
-        # Create the matrix for the linear equations
-        A = np.zeros((n, n))
-        b = np.zeros((n,))
+K6 = nx.complete_graph(6)
 
-        for i, node in enumerate(self.graph.nodes()):
-            A[i][i] = 1
-            neighbors = list(self.graph.neighbors(node))
-            A[i, neighbors] = -1 / len(neighbors)
-            b[i] = 0
+# Print basic information about the graph
+print("Nodes:", K6.nodes())
+print("Edges:", K6.edges())
 
-        # Solve the linear equations
-        x, y = np.linalg.solve(A, b), np.zeros((n,))
-        pos = {node: (x[i], y[i]) for i, node in enumerate(self.graph.nodes())}
-        return pos
+# Draw and visualize the graph
+pos = nx.random_layout(K6)  # Position nodes using a spring layout
+nx.draw(K6, pos, with_labels=True, node_size=500, node_color='skyblue', font_size=12, font_color='black', font_weight='bold', edge_color='gray', width=2)
 
-# Example usage:
-# G = nx.complete_graph(5)
-# tutte_algorithm = TutteAlgorithm(G)
-# tutte_algorithm.draw_planar_graph()
+# You can save the graph as an image or display it
+plt.savefig("K6_graph.png", format="PNG")
+plt.show()
+
+# You can save the graph as an image or display it
+plt.show()
+
