@@ -309,7 +309,7 @@ class Image_object:
     def circle(self, rayon, x, y, scale=1, epaisseur = 1):
         midpoint_circle = MidpointCircle(rayon)
         circle_points = midpoint_circle.get_circle()
-        print(circle_points)
+        #print(circle_points)
         for i in range(len(circle_points)):
             self.ajoute_point(circle_points[i][0]+x, circle_points[i][1]+y, epaisseur)
 
@@ -317,13 +317,17 @@ class Image_object:
     def line(self, x0, y0, x1, y1, scale=1, epaisseur=1):
         bresenham_line = Bresenham(x0, y0, x1, y1)
         line_points = bresenham_line.get_line()
-        print(line_points)
+        #print(line_points)
         for i in range(len(line_points)):
-            print(line_points[i][0])
+            #print(line_points[i][0])
             
             self.ajoute_point(line_points[i][0], line_points[i][1], epaisseur)
     
     def plot_graph(self, graph, rayon = 20, epaisseur = 2):
+        self.name = graph.name
+
+        adapt_hauteur = self.hauteur *0.9
+        adapt_longueur = self.longueur *0.9
         
         for i in range(graph.get_nb_aretes()):
             print(i)
@@ -333,11 +337,13 @@ class Image_object:
             debut = arete.get_debut()
             fin = arete.get_fin()
 
-            x0 = int(debut.get_pos_x() * self.longueur + rayon)
-            y0 = int(debut.get_pos_y() * self.hauteur + rayon)
+            
 
-            x1 = int(fin.get_pos_x() * self.longueur + rayon)
-            y1 = int(fin.get_pos_y() * self.hauteur + rayon)
+            x0 = int(debut.get_pos_x() * adapt_longueur + rayon)
+            y0 = int(debut.get_pos_y() * adapt_hauteur + rayon)
+
+            x1 = int(fin.get_pos_x() * adapt_longueur + rayon)
+            y1 = int(fin.get_pos_y() * adapt_hauteur + rayon)
 
             self.line(x0, y0, x1, y1, epaisseur = epaisseur)
             
@@ -346,8 +352,8 @@ class Image_object:
             print(i)
             sommet = graph.get_sommet(i)
 
-            x = int(sommet.get_pos_x()* self.longueur)
-            y = int(sommet.get_pos_y()* self.hauteur)
+            x = int(sommet.get_pos_x()* adapt_longueur)
+            y = int(sommet.get_pos_y()* adapt_hauteur)
 
             self.circle(rayon, x, y, epaisseur = epaisseur)
 

@@ -1,9 +1,9 @@
 import random as rd
 class Sommet:
-    def __init__(self, name):
+    def __init__(self, name, pos_x=None, pos_y=None):
         self.name = name
-        self.pos_x = rd.random()
-        self.pos_y = rd.random()
+        self.pos_x = pos_x if pos_x is not None else rd.random()
+        self.pos_y = pos_y if pos_y is not None else rd.random()
 
     def set_name(self, name):
         self.name = name
