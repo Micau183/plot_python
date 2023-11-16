@@ -330,7 +330,7 @@ class Image_object:
         adapt_longueur = self.longueur *0.9
         
         for i in range(graph.get_nb_aretes()):
-            print(i)
+            #print(i)
 
             arete = graph.get_arete(i)
 
@@ -349,7 +349,7 @@ class Image_object:
             
 
         for i in range(graph.get_nb_sommets()):
-            print(i)
+            #print(i)
             sommet = graph.get_sommet(i)
 
             x = int(sommet.get_pos_x()* adapt_longueur)

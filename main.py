@@ -133,25 +133,39 @@ def main():
    
     # Create a Graph and add Sommets and Aretes to it
     graph = Graph()
- # Create Sommet instances
+    # Create Sommet instances
     sommet1 = Sommet("A")
     sommet2 = Sommet("B")
     sommet3 = Sommet("C")
     sommet4 = Sommet("D")
     sommet5 = Sommet("E")
+    sommet6 = Sommet("F")
+    sommet7 = Sommet("G")
+    sommet8 = Sommet("H")
 
     # Create Arete instances to connect Sommets
-    arete1 = Arete(sommet1, sommet2)
+    #arete1 = Arete(sommet1, sommet2)
     arete2 = Arete(sommet2, sommet3)
     arete3 = Arete(sommet3, sommet4)
     arete4 = Arete(sommet4, sommet5)
-    arete5 = Arete(sommet5, sommet1)
+    #arete5 = Arete(sommet5, sommet1)
     arete6 = Arete(sommet5, sommet3)
-    graph.add_sommets([sommet1, sommet2, sommet3, sommet4, sommet5])
-    graph.add_aretes([arete1, arete2, arete3, arete4, arete5, arete6])
-    largest_face = graph.trouver_plus_grand_face()
+    #arete7 = Arete(sommet1, sommet6)
+    arete8 = Arete(sommet6, sommet7)
+    arete9 = Arete(sommet7, sommet8)
+    arete10 = Arete(sommet8, sommet2)
+    arete11 = Arete(sommet2, sommet4)
+    arete12 = Arete(sommet4, sommet6)
+    arete13 = Arete(sommet6, sommet3)
+    arete14 = Arete(sommet3, sommet7)
+    #arete15 = Arete(sommet7, sommet1)
 
-    graph.plongement_tutte(largest_face[-1])
+    graph.add_sommets([sommet1, sommet2, sommet3, sommet4, sommet5, sommet6, sommet7, sommet8])
+    graph.add_aretes([ arete2, arete3, arete4, arete6, arete8, arete9, arete10, arete11, arete12, arete13, arete14])
+
+    graph.plus_grand_cycle()
+
+    #graph.plongement_tutte()
 
     img_obj.plot_graph(graph, epaisseur=2)
     renderer.set_image(img_obj)
@@ -159,6 +173,5 @@ def main():
     renderer.set_name('graph_test')
     renderer.rendu()
 
-    print("Largest face:", largest_face)
 if __name__ == "__main__":
     main()
