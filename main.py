@@ -144,33 +144,34 @@ def main():
     sommet8 = Sommet("H")
 
     # Create Arete instances to connect Sommets
-    #arete1 = Arete(sommet1, sommet2)
+    arete1 = Arete(sommet1, sommet2)
     arete2 = Arete(sommet2, sommet3)
-    arete3 = Arete(sommet3, sommet4)
-    arete4 = Arete(sommet4, sommet5)
-    #arete5 = Arete(sommet5, sommet1)
-    arete6 = Arete(sommet5, sommet3)
-    #arete7 = Arete(sommet1, sommet6)
-    arete8 = Arete(sommet6, sommet7)
+    arete3 = Arete(sommet3, sommet1)
+    
+    arete4 = Arete(sommet1, sommet4)
+    arete5 = Arete(sommet4, sommet5)
+    arete6 = Arete(sommet5, sommet6)
+    arete7 = Arete(sommet6, sommet1)
+    arete8 = Arete(sommet2, sommet7)
     arete9 = Arete(sommet7, sommet8)
-    arete10 = Arete(sommet8, sommet2)
-    arete11 = Arete(sommet2, sommet4)
-    arete12 = Arete(sommet4, sommet6)
-    arete13 = Arete(sommet6, sommet3)
-    arete14 = Arete(sommet3, sommet7)
-    #arete15 = Arete(sommet7, sommet1)
+    arete10 = Arete(sommet8, sommet3)
 
-    graph.add_sommets([sommet1, sommet2, sommet3, sommet4, sommet5, sommet6, sommet7, sommet8])
-    graph.add_aretes([ arete2, arete3, arete4, arete6, arete8, arete9, arete10, arete11, arete12, arete13, arete14])
+    # Add additional Sommets and Aretes to the graph
+    graph.add_sommets([sommet4, sommet5, sommet6, sommet7, sommet8])
+    graph.add_aretes([arete4, arete5, arete6, arete7, arete8, arete9, arete10])
 
-    graph.plus_grand_cycle()
+    graph.add_sommets([sommet1, sommet2, sommet3])
+    graph.add_aretes([arete1, arete2, arete3])
 
-    #graph.plongement_tutte()
+    #graph.cycles_fermes(graph.sommets[0])
+    print(graph.plus_grand_cycle())
+
+    graph.plongement_tutte()
 
     img_obj.plot_graph(graph, epaisseur=2)
     renderer.set_image(img_obj)
     renderer.assemble_image()
-    renderer.set_name('graph_test')
+    renderer.set_name('graph_test_plongement')
     renderer.rendu()
 
 if __name__ == "__main__":

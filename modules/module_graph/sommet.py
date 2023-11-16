@@ -5,6 +5,9 @@ class Sommet:
         self.name = name
         self.pos_x = pos_x if pos_x is not None else rd.random()
         self.pos_y = pos_y if pos_y is not None else rd.random()
+        self.voisins = []
+        self.visited = False
+        self.parent = None
 
     def set_name(self, name):
         self.name = name
@@ -16,6 +19,8 @@ class Sommet:
             self.pos_y = y 
         else: 
             print ("Le sommet %s, est fixé", self.name)
+    def ajoute_voisin(self, sommet):
+        self.voisins.append(sommet)
     
     def fix(self, pos):
         x, y = pos 
