@@ -168,13 +168,6 @@ def main():
     graph.add_aretes([arete1, arete2, arete3, arete4, arete5, arete6, arete7, arete8, arete9, arete10, arete11, arete12, arete13])
     # ... (previous code)
 
-    # Additional Arete instances
-    arete14 = Arete(sommetF, sommetI)
-    arete15 = Arete(sommetI, sommetG)
-    
-
-    # Add additional Aretes to the graph
-    graph.add_aretes([arete14, arete15])
 
     #graph.cycles_fermes(graph.sommets[0])
     print(graph.plus_grand_cycle())
