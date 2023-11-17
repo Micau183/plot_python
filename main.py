@@ -132,36 +132,49 @@ def main():
     # Create Arete instances to connect Sommets
    
     # Create a Graph and add Sommets and Aretes to it
-    graph = Graph()
+    
     # Create Sommet instances
-    sommet1 = Sommet("A")
-    sommet2 = Sommet("B")
-    sommet3 = Sommet("C")
-    sommet4 = Sommet("D")
-    sommet5 = Sommet("E")
-    sommet6 = Sommet("F")
-    sommet7 = Sommet("G")
-    sommet8 = Sommet("H")
+    sommetA = Sommet("A")
+    sommetB = Sommet("B")
+    sommetC = Sommet("C")
+    sommetD = Sommet("D")
+    sommetE = Sommet("E")
+    sommetF = Sommet("F")
+    sommetG = Sommet("G")
+    sommetH = Sommet("H")
+    sommetI = Sommet("I")
+    sommetJ = Sommet("J")
 
     # Create Arete instances to connect Sommets
-    arete1 = Arete(sommet1, sommet2)
-    arete2 = Arete(sommet2, sommet3)
-    arete3 = Arete(sommet3, sommet1)
+    arete1 = Arete(sommetA, sommetB)
+    arete2 = Arete(sommetB, sommetC)
+    arete3 = Arete(sommetC, sommetA)
+    arete4 = Arete(sommetB, sommetD)
+    arete5 = Arete(sommetD, sommetE)
+    arete6 = Arete(sommetE, sommetA)
+    arete7 = Arete(sommetC, sommetF)
+    arete8 = Arete(sommetF, sommetG)
+    arete9 = Arete(sommetG, sommetH)
+    arete10 = Arete(sommetH, sommetC)
+    arete11 = Arete(sommetD, sommetI)
+    arete12 = Arete(sommetI, sommetJ)
+    arete13 = Arete(sommetJ, sommetA)
+
+    # Create an empty graph
+    graph = Graph()
+
+    # Add Sommets and Aretes to the graph
+    graph.add_sommets([sommetA, sommetB, sommetC, sommetD, sommetE, sommetF, sommetG, sommetH, sommetI, sommetJ])
+    graph.add_aretes([arete1, arete2, arete3, arete4, arete5, arete6, arete7, arete8, arete9, arete10, arete11, arete12, arete13])
+    # ... (previous code)
+
+    # Additional Arete instances
+    arete14 = Arete(sommetF, sommetI)
+    arete15 = Arete(sommetI, sommetG)
     
-    arete4 = Arete(sommet1, sommet4)
-    arete5 = Arete(sommet4, sommet5)
-    arete6 = Arete(sommet5, sommet6)
-    arete7 = Arete(sommet6, sommet1)
-    arete8 = Arete(sommet2, sommet7)
-    arete9 = Arete(sommet7, sommet8)
-    arete10 = Arete(sommet8, sommet3)
 
-    # Add additional Sommets and Aretes to the graph
-    graph.add_sommets([sommet4, sommet5, sommet6, sommet7, sommet8])
-    graph.add_aretes([arete4, arete5, arete6, arete7, arete8, arete9, arete10])
-
-    graph.add_sommets([sommet1, sommet2, sommet3])
-    graph.add_aretes([arete1, arete2, arete3])
+    # Add additional Aretes to the graph
+    graph.add_aretes([arete14, arete15])
 
     #graph.cycles_fermes(graph.sommets[0])
     print(graph.plus_grand_cycle())
@@ -171,7 +184,7 @@ def main():
     img_obj.plot_graph(graph, epaisseur=2)
     renderer.set_image(img_obj)
     renderer.assemble_image()
-    renderer.set_name('graph_test_plongement')
+    renderer.set_name('graph_test_tutte')
     renderer.rendu()
 
 if __name__ == "__main__":

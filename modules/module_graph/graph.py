@@ -135,26 +135,73 @@ class Graph:
 
         # Remplissage de la matrice d'adjacence en fonction des arêtes
         for arete in self.aretes:
-            i, j = arete  # arete est une paire (i, j)
+            sommet1, sommet2 = arete.debut, arete.fin # arete est une paire (i, j)
+            i = self.get_index(sommet1)
+            j = self.get_index(sommet2)
             adj_matrix[i][j] = 1
             adj_matrix[j][i] = 1  # Si le graphe est non orienté
 
         self.adjancy = adj_matrix
                 
-    def degree_matrix(self):
 
-        degree_vector = np.sum(self.adjacency, axis=1)
-        degree_matrix = np.diag(degree_vector)
+    def degree_matrix(self):
+        num_nodes = len(self.adjancy)
+        degree_matrix = np.zeros((num_nodes, num_nodes))
+
+        for i in range(num_nodes):
+            degree_matrix[i, i] = np.sum(self.adjancy[i, :])
 
         return degree_matrix
 
-                
 
+    def get_index(self, sommet):
+        for i in range(len(self.sommets)):
+            if self.sommets[i] == sommet:
+                return i
+
+    def replace_sommet(self, face):
+        #replace les sommets fixés au début de la liste des sommets du graphe
+        for i in range(len(self.sommets)):
+            if self.sommets[i] in face:
+                s =self.sommets.pop(i)
+                self.sommets.insert(0, s)
 
     def plongement_tutte(self):
         face = self.plus_grand_cycle()
-        nb_sommet = len(face)
-        for i in range(nb_sommet):
-            face[i].fix((0.5 * (np.cos(2 * np.pi * i / nb_sommet) + 1), 0.5 * (np.sin(2 * np.pi * i / nb_sommet) + 1)))
+        n = self.get_nb_sommets()
+        nb_sommet_ext = len(face)
+        nb_sommet_int = n - nb_sommet_ext
+
+        self.replace_sommet(face)
+        
+        for sommet in face:
+            self.get_index(sommet)
+
+        self.adjacency_matrix()
+        print(self.adjancy)
+        L = self.degree_matrix() - self.adjancy
+        print("L : " +str(np.shape(L)))
+        L1 = L[nb_sommet_int:, nb_sommet_int:]
+        Q = L[nb_sommet_int:, :nb_sommet_ext]
+        L1_inverse = np.linalg.inv(L1)
+
+        P = np.zeros((n, 2))
+
+        for i in range(nb_sommet_ext):
+            pos_x = 0.5 * (np.cos(2 * np.pi * i / nb_sommet_ext) + 1)
+            pos_y = 0.5 * (np.sin(2 * np.pi * i / nb_sommet_ext) + 1)
             
-        inner = [i for i in range(self.get_nb_sommets)]
+            # Assuming face[i].fix() updates the position of the vertex in the graph
+            face[i].fix((pos_x, pos_y))
+            P[i] = [pos_x, pos_y]
+
+        # Assuming P[nb_sommet_int] should be updated based on the Tutte embedding formula
+        print(np.shape(-L1_inverse))
+        print(np.shape(Q))
+        print(np.shape(P[:nb_sommet_ext]))
+
+        P[nb_sommet_int:] = -L1_inverse @ Q @ P[:nb_sommet_ext]
+        print(P)
+
+        for i in range(n):
+            self.sommets[i].set_pos((P[i,0], P[i,1]))
