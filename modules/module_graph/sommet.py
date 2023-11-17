@@ -8,6 +8,7 @@ class Sommet:
         self.voisins = []
         self.visited = False
         self.parent = None
+        self.force = None
 
     def set_name(self, name):
         self.name = name
@@ -17,8 +18,7 @@ class Sommet:
             x, y = pos 
             self.pos_x = x
             self.pos_y = y 
-        else: 
-            print ("Le sommet %s, est fixé", self.name)
+        
     def ajoute_voisin(self, sommet):
         self.voisins.append(sommet)
     
