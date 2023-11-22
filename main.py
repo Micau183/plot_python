@@ -133,27 +133,58 @@ def main():
    
 
         # Create Arete instances to connect Sommets
-    # Create 8 Sommet instances
-    sommets = [Sommet(str(i)) for i in range(1, 7)]
+    # # Create 8 Sommet instances
+    # sommets = [Sommet(str(i)) for i in range(1, 8)]
 
-    # Create 12 Arete instances
+    # # Create 12 Arete instances
+    # aretes = [
+    #     Arete(sommets[0], sommets[1]),
+    #     Arete(sommets[1], sommets[2]),
+    #     Arete(sommets[2], sommets[0]),
+
+    #     Arete(sommets[3], sommets[4]),
+    #     Arete(sommets[4], sommets[5]),
+    #     Arete(sommets[5], sommets[6]),
+    #     Arete(sommets[6], sommets[3]),
+
+    #     Arete(sommets[0], sommets[3]),
+    #     Arete(sommets[1], sommets[4]),
+    #     Arete(sommets[2], sommets[5]),
+
+    #     Arete(sommets[0], sommets[4]),
+    # ]
+
+    # # Create a Graph and add Sommets and Aretes to it
+    # Create 10 Sommet instances
+    sommets = [Sommet(str(i)) for i in range(1, 11)]
+
+    # Create 15 Arete instances
     aretes = [
         Arete(sommets[0], sommets[1]),
         Arete(sommets[1], sommets[2]),
-        Arete(sommets[2], sommets[0]),
-
+        Arete(sommets[2], sommets[3]),
         Arete(sommets[3], sommets[4]),
         Arete(sommets[4], sommets[5]),
-        Arete(sommets[5], sommets[3]),
+        Arete(sommets[5], sommets[6]),
+        Arete(sommets[6], sommets[7]),
+        Arete(sommets[7], sommets[8]),
+        Arete(sommets[8], sommets[9]),
+        Arete(sommets[9], sommets[0]),
 
-        Arete(sommets[0], sommets[3]),
-        Arete(sommets[1], sommets[4]),
-        Arete(sommets[2], sommets[5]),
-
-        Arete(sommets[0], sommets[4]),
+        Arete(sommets[0], sommets[2]),
+        Arete(sommets[1], sommets[3]),
+        Arete(sommets[2], sommets[4]),
+        Arete(sommets[3], sommets[5]),
+        Arete(sommets[4], sommets[6]),
+        Arete(sommets[5], sommets[7]),
+        Arete(sommets[6], sommets[8]),
+        Arete(sommets[7], sommets[9]),
+        Arete(sommets[8], sommets[0]),
+        Arete(sommets[9], sommets[1]),
     ]
 
-    # Create a Graph and add Sommets and Aretes to it
+    # This completes a planar graph with 10 sommets and 15 aretes
+
     graph = Graph()
     graph.add_sommets(sommets)
     graph.add_aretes(aretes)
@@ -164,7 +195,6 @@ def main():
     img_obj.plot_graph(graph, epaisseur=2)
     renderer.set_image(img_obj)
     renderer.assemble_image()
-    renderer.set_name('graph_test_tutte')
     renderer.rendu()
 
 if __name__ == "__main__":
