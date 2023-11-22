@@ -3,14 +3,20 @@
 <br/>
 
 Le projet consiste à réimplémenter une partie des bibliothèques matplotlib.pyplot et networkx, ainsi qu'à pouvoir afficher des graphes avec un plongement planaire.
-
+Exemple d'une image contenant deux "sous-images" représentant deux fonctions :
 <br/>
 
 <div style="display: flex; align-items: center;">
-    <img src="https://i.imgur.com/ao0JzHl.png" style="width: 50%;">
+    <img src="https://i.imgur.com/ao0JzHl.png" style="width: 80%;">
 </div>
+<br/>
+<br/>
 
 
+Exemple d'une image contenant un plongement planaire d'un graphe :
+<div style="display: flex; align-items: center;">
+    <img src="https://i.imgur.com/A5yH7e0.png" style="width: 60%;">
+</div>
 
 <br/>
 
@@ -27,7 +33,8 @@ Les fonctionnalités suivantes ont été implémentées :
 - Possibilité de choisir la taille, l'épaisseur et la couleur pour tous les éléments.
 - Création d'un "Scale automatique" qui permet de choisir automatiquement la taille du texte en fonction de la taille du contexte.
 - Tracé de graphes.
-- Algorithme d'incorporation Tutte pour les plongements planaires de graphes (en cours).
+- Algorithme de tracé de cercle (MidPoint circle algorithm) et de remplissage de cercle.
+- Algorithme d'incorporation Tutte pour les plongements planaires de graphes.
 
 ## Le programme
 Quelques exemples sont disponibles en commentaire dans le fichier principal, et pour lancer le programme (sans arguments), exécutez :
@@ -37,5 +44,5 @@ Quelques exemples sont disponibles en commentaire dans le fichier principal, et 
 Les fichiers seront enregistrés dans le dossier 'output' à la fin de l'exécution du programme.
 
 ## Infos
-Le programme n'étant pas encore terminé, les bibliothèques matplotlib.pyplot et networkx sont toujours présentes dans le code pour faciliter le débogage.
-La seule bibliothèque utilisée à terme sera numpy.
+Le programme étant un projet les bibliothèques matplotlib.pyplot et networkx sont  présentes dans le code pour faciliter le débogage.
+La seule bibliothèque utilisée dans les programmes est numpy.
