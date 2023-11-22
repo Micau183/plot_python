@@ -192,7 +192,7 @@ def main():
    
     graph.plongement_tutte_triangle()
 
-    img_obj.plot_graph(graph, epaisseur=2)
+    img_obj.plot_graph(graph, epaisseur=2, fill_color='vert')
     renderer.set_image(img_obj)
     renderer.assemble_image()
     renderer.rendu()

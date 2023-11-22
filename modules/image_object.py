@@ -306,24 +306,32 @@ class Image_object:
             #print(str(start_y + pas*i))
             self.text_plot(str(round(start_y + pas*i, 1)), pos =[int(liste[i]), int(self.longueur*2/4)], scale = scale, epaisseur = epaisseur)
         
-    def circle(self, rayon, x, y, scale=1, epaisseur = 1):
+    def circle(self, rayon, x, y, epaisseur = 1, couleur='noir', fill_color =None):
         midpoint_circle = MidpointCircle(rayon)
         circle_points = midpoint_circle.get_circle()
         #print(circle_points)
+        if fill_color != None:
+            print("ici")
+            liste_lignes = midpoint_circle.fill_circle(circle_points)
+
+            for ligne in liste_lignes:
+                print(ligne)
+                self.line(ligne[0,0]+x, ligne[0,1]+y, ligne[1,0]+x, ligne[1,1]+y, epaisseur=1, couleur=fill_color)
+
         for i in range(len(circle_points)):
-            self.ajoute_point(circle_points[i][0]+x, circle_points[i][1]+y, epaisseur)
+            self.ajoute_point(circle_points[i][0]+x, circle_points[i][1]+y, epaisseur, couleur=couleur)
 
-
-    def line(self, x0, y0, x1, y1, scale=1, epaisseur=1):
+        
+    def line(self, x0, y0, x1, y1, epaisseur=1, couleur='noir'):
         bresenham_line = Bresenham(x0, y0, x1, y1)
         line_points = bresenham_line.get_line()
         #print(line_points)
         for i in range(len(line_points)):
             #print(line_points[i][0])
             
-            self.ajoute_point(line_points[i][0], line_points[i][1], epaisseur)
+            self.ajoute_point(line_points[i][0], line_points[i][1], epaisseur, couleur=couleur)
     
-    def plot_graph(self, graph, rayon = 20, epaisseur = 2):
+    def plot_graph(self, graph, rayon = 20, epaisseur = 2, fill_color =None):
         self.name = graph.name
 
         adapt_hauteur = self.hauteur *0.9
@@ -355,7 +363,10 @@ class Image_object:
             x = int(sommet.get_pos_x()* adapt_longueur)
             y = int(sommet.get_pos_y()* adapt_hauteur)
 
-            self.circle(rayon, x, y, epaisseur = epaisseur)
+            if sommet.couleur != None:
+                fill_color = sommet.couleur
+
+            self.circle(rayon, x, y, epaisseur = epaisseur, fill_color =fill_color)
 
 
 def test():

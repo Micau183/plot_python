@@ -6,9 +6,7 @@ class Sommet:
         self.pos_x = pos_x if pos_x is not None else rd.random()
         self.pos_y = pos_y if pos_y is not None else rd.random()
         self.voisins = []
-        self.visited = False
-        self.parent = None
-        self.force = None
+        self.couleur = None
 
     def get_nb_voisins(self):
         return len(self.voisins)

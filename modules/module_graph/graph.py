@@ -184,7 +184,7 @@ class Graph:
         L = np.array(self.degree_matrix() - self.adjancy)
         L1 = L[inner][:,inner]
         Q = L[inner][:, outerface]
-        print(L1)
+        
         L1_inverse = np.linalg.inv(L1)
 
         P = np.zeros((n,2))

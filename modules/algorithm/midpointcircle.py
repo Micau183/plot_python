@@ -37,9 +37,31 @@ class MidpointCircle:
             [-y+self.radius, -x+self.radius],
         ])
 
+    def fill_circle(self, points):
+        srt = np.array(sorted(points, key=lambda x: (x[0], x[1])))
+        liste_ligne = []
+        
+        i = 0
+
+        while i < len(srt):
+            debut = srt[i]
+            fin = debut
+
+            while i < len(srt) and debut[0] == srt[i, 0]:
+                fin = srt[i]
+                i += 1
+
+            liste_ligne.append([debut, fin])
+
+        return np.array(liste_ligne)
+
+
+
+
+
 # Example usage:
 def test():
-    radius = 100
+    radius = 10
 
     midpoint_circle = MidpointCircle(radius)
     circle_points = midpoint_circle.get_circle()
@@ -51,5 +73,8 @@ def test():
     for point in circle_points:
         image[point[0],point[1]] = 1
 
+    print(midpoint_circle.fill_circle(circle_points))
     plt.imshow(image, cmap='gray')
     plt.show()
+
+#test()
