@@ -279,3 +279,91 @@ class Graph:
         print(P[nb_sommet_int:])
         for i in range(n):
             self.sommets[i].set_pos((P[i,0], P[i,1]))
+
+    def trouve_triangle(self):
+        triangles = []
+
+        # Create an adjacency list for quick neighbor lookup
+        adjacency_list = {sommet.name: set() for sommet in self.sommets}
+        for arete in self.aretes:
+            adjacency_list[arete.debut.name].add(arete.fin.name)
+            adjacency_list[arete.fin.name].add(arete.debut.name)
+
+        # Iterate through all triples of vertices
+        for i in range(len(self.sommets)):
+            for j in range(i + 1, len(self.sommets)):
+                for k in range(j + 1, len(self.sommets)):
+                    sommet1, sommet2, sommet3 = self.sommets[i], self.sommets[j], self.sommets[k]
+
+                    # Check if there is an edge between every pair of vertices in the triple
+                    if sommet2.name in adjacency_list[sommet1.name] and sommet3.name in adjacency_list[sommet1.name] \
+                            and sommet3.name in adjacency_list[sommet2.name]:
+                        triangle = (sommet1, sommet2, sommet3)
+                        triangles.append(triangle)
+
+        return triangles
+
+    def sum_sommet(self, liste):
+        somme = 0
+        for i in range(len(liste)):
+            somme += liste[i].get_nb_voisins()
+        return somme
+    
+    def plus_de_voisins(self, triangles):
+        max_triangle = triangles[0]
+        max = self.sum_sommet(triangles[0])
+        for i in range(len(triangles)):
+            somme = self.sum_sommet(triangles[i]) 
+            if somme > max:
+                max = somme
+                max_triangle = triangles[i]
+
+        return max_triangle
+    
+    def to_indice(self, triangle):
+        liste_indice = []
+        for sommet in triangle:
+            for i in range(len(self.sommets)):
+                if self.sommets[i] == sommet:
+                    liste_indice.append(i)
+        return liste_indice
+
+
+    def plongement_tutte_triangle(self):
+        triangles = self.trouve_triangle()
+        triangle = self.plus_de_voisins(triangles)
+        a = self.to_indice(triangle)
+        
+        outerface = np.array(a)
+        
+        n = self.get_nb_sommets()
+        inner = np.array([i for i in range(n) if i not in outerface])
+
+        self.adjacency_matrix()
+        L = np.array(self.degree_matrix() - self.adjancy)
+        L1 = L[inner][:,inner]
+        Q = L[inner][:, outerface]
+        print(L1)
+        L1_inverse = np.linalg.inv(L1)
+
+        P = np.zeros((n,2))
+
+
+        circle = self.circle_points(3)
+        for i,v in enumerate(outerface):
+            P[v] = circle[i]
+        P[inner] = -L1_inverse @ Q @ P[outerface]
+
+        for i in range(n):
+            self.sommets[i].set_pos((P[i,0], P[i,1]))
+
+
+    def circle_points(self, entier):
+        liste = []
+        for i in range(entier):
+            pos_x = 0.5 * (np.cos(2 * np.pi * i / entier) + 1)
+            pos_y = 0.5 * (np.sin(2 * np.pi * i / entier) + 1)
+            
+            # Assuming face[i].fix() updates the position of the vertex in the graph
+            liste.append([pos_x, pos_y])
+        return np.array(liste)

@@ -10,6 +10,9 @@ class Sommet:
         self.parent = None
         self.force = None
 
+    def get_nb_voisins(self):
+        return len(self.voisins)
+    
     def set_name(self, name):
         self.name = name
 
